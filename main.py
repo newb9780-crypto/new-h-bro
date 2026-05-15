@@ -342,13 +342,13 @@ async def youtube_to_txt(client, message: Message):
                                 # Cleaning
                                 if os.path.exists(final_video): os.remove(final_video)
                                 count += 1
-                                 continue
+                                 #continue
                             else:
                                 await prog_msg.edit("❌ API ne key nahi di!")
                         else:
                             await prog_msg.edit(f"⚠️ API Status: {resp.status}")
                             count += 1
-                             continue
+                             #continue
 
 
     # Create and save the .txt file with the custom name
