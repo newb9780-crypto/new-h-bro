@@ -309,7 +309,8 @@ async def youtube_to_txt(client, message: Message):
         video_title = result.get('title', 'No title')
         url = result['url']
         videos.append(f"{video_title}: {url}")
-                        if "classplusapp.com/drm/" in url:
+                
+        if "classplusapp.com/drm/" in url:
                 # 1. Deepak API ka URL
                 my_api_link = f"https://deepak-drm-api.vercel.app/classplus?pssh={url}&license_url={url}"
                 prog_msg = await m.reply_text("🔑 **Deepak API: Fetching Key...**")
