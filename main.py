@@ -27,6 +27,11 @@ from pyrogram.errors.exceptions.bad_request_400 import StickerEmojiInvalid
 from pyrogram.types.messages_and_media import message
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
+def fix_classplus_url(url):
+    if "playlist.m3u8&" in url:
+        url = url.replace("playlist.m3u8&", "playlist.m3u8?")
+    return url
+
 photologo = 'https://tinypic.host/images/2025/02/07/DeWatermark.ai_1738952933236-1.png'
 photoyt = 'https://tinypic.host/images/2025/03/18/YouTube-Logo.wine.png'
 
@@ -388,6 +393,7 @@ async def txt_handler(bot: Client, m: Message):
         for i in content:
             if "://" in i:
                 url = i.split("://", 1)[1]
+                url = fix_classplus_url(url)
                 links.append(i.split("://", 1))
                 if ".pdf" in url:
                     pdf_count += 1
@@ -493,9 +499,14 @@ async def txt_handler(bot: Client, m: Message):
         for i in range(arg-1, len(links)):
             Vxy = links[i][1].replace("file/d/","uc?export=download&id=").replace("www.youtube-nocookie.com/embed", "youtu.be").replace("?modestbranding=1", "").replace("/view?usp=sharing","")
             url = "https://" + Vxy
+            url = fix_classplus_url(url)
             link0 = "https://" + Vxy
             urlcpvod = "https://dragoapi.vercel.app/video/https://" + Vxy
-            
+
+            # DRM link pehle handle karo (yahaan daalo)
+            if "classplusapp.com/drm/" in url:
+                url = "https://dragoapi.vercel.app/classplus?link=" + url
+                print("DRM URL modified:", url)    
             if "visionias" in url:
                 async with ClientSession() as session:
                     async with session.get(url, headers={'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9', 'Accept-Language': 'en-US,en;q=0.9', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive', 'Pragma': 'no-cache', 'Referer': 'http://www.visionias.in/', 'Sec-Fetch-Dest': 'iframe', 'Sec-Fetch-Mode': 'navigate', 'Sec-Fetch-Site': 'cross-site', 'Upgrade-Insecure-Requests': '1', 'User-Agent': 'Mozilla/5.0 (Linux; Android 12; RMX2121) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Mobile Safari/537.36', 'sec-ch-ua': '"Chromium";v="107", "Not=A?Brand";v="24"', 'sec-ch-ua-mobile': '?1', 'sec-ch-ua-platform': '"Android"',}) as resp:
